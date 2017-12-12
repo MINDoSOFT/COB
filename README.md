@@ -27,6 +27,14 @@ Check our visit our [project page](http://www.vision.ee.ethz.ch/~cvlsegmentation
 - For demos about how to use these functions, see the `demos` folder
 
 For more information on how to use the code, please read `README.txt`
+
+### Adjustments
+- build.m (adjusted boost path)
+- set_params.m (adjusted caffe path)
+- Download the NYUD-v2 trained model and place it under models
+- Start matlab
+- On first run 'build'
+- On every run 'install'
  
 ### Citation:
 If you use this code, please consider citing the following papers:

@@ -29,7 +29,7 @@ if ~evalin('base','exist(''cob_params'',''var'')')
     cob_params.gpu_id = 0;
     
     % Specify /path/to/caffe (needed for matcaffe)
-    cob_params.caffe_path = '/path/to/caffe/matlab/';
+    cob_params.caffe_path = sprintf('%s/hed/matlab/', cob_root);
     if ~exist(cob_params.caffe_path,'dir')
         error(['Caffe path ''' cob_params.caffe_path ''' not found'])
     end

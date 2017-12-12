@@ -31,7 +31,8 @@ include{1} = fullfile(cob_root, 'src', 'misc');  % To get matlab_multiarray.hpp
 if (strcmp(computer(),'PCWIN64') || strcmp(computer(),'PCWIN32'))
     include{2} = 'C:\Program Files\boost_1_55_0';  % Boost libraries (change it if necessary)
 else
-    include{2} = '/opt/local/include/';  % Boost libraries (change it if necessary)
+    %include{2} = '/opt/local/include/';  % Boost libraries (change it if necessary)
+    include{2} = '/usr/include/boost/';
 end
 include{3} = fullfile(cob_root, 'src', 'external','piotr_toolbox'); % To build Piotr toolbox
 include{4} = fullfile(cob_root, 'src', 'external'); % To build Piotr toolbox
