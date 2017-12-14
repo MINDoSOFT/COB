@@ -42,7 +42,9 @@ def clearWorkers():
   # Clear the worker scripts
   for x in range(0, workers):
     worker_script = "worker" + str(x+1);
-    os.remove(worker_script + ".m");
+    worker_script_filename = worker_script + ".m";
+    if os.path.exists(worker_script_filename):
+      os.remove(worker_script_filename);
 
 #print(len(rgb_files))
 
@@ -65,17 +67,17 @@ cnt = len(rgb_files);
 for ii in range(0, int(math.ceil(float(cnt)/workers))):
   # Spawn the workers
   for x in range(0, workers):
-    if (x+1+(ii * workers) > cnt):
+    batchId = (x+1+(ii * workers))
+    if (batchId > cnt):
       clearWorkers();
       exit();
-    batchId = (x+1+(ii * workers))
     print('BatchId: %d' % (batchId))
-    if(True or batchId==101): # adjust if you want only a specific file
+    if(True or batchId==121): # adjust if you want only a specific file
       fileName = os.path.splitext(rgb_files[batchId-1])[0]
       matlab_script_with_vars = matlab_script % (output_dir + '/' + fileName + '.mat', images_dir + '/' + rgb_files[batchId-1], hha_dir + '/' + hha_files[batchId-1])
       
       worker_script = "worker" + str(x+1);
-      if (x == (workers-1)):
+      if (x == (workers-1) or (batchId == cnt)): # Wait at last worker of current or total batch
         spawn_command = launch_save_frame_batch_wait % (worker_script)
       else:
         spawn_command = launch_save_frame_batch % (worker_script)
