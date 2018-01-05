@@ -29,7 +29,8 @@ D = imread(fullfile('%s'));
 %%  - less than 1s on the GPU
 %%  - around 8s on the CPU
 tic; [ucm2, ucms, ~, O, E] = im2ucm(cat(3,I,D)); toc;
-sp = bwlabel(ucm2 < 0.20); sp = sp(2:2:end, 2:2:end);
+%% Original was < 0.20
+sp = bwlabel(ucm2 < 0.10); sp = sp(2:2:end, 2:2:end);
 if(~isempty(out_file)), save(out_file, 'sp'); end
 disp('Compute the Superpixels OK');""";
 
@@ -58,8 +59,11 @@ def clearWorkers():
 
 #workers = cnt - 1;
 # For testing
-#workers = 4;
 workers = 4;
+# workers = 1;
+
+specificWorker = False;
+specificBatchId = 51;
 
 cnt = len(rgb_files);
 
@@ -72,12 +76,12 @@ for ii in range(0, int(math.ceil(float(cnt)/workers))):
       clearWorkers();
       exit();
     print('BatchId: %d' % (batchId))
-    if(True or batchId==121): # adjust if you want only a specific file
+    if(not specificWorker or (specificWorker and batchId==specificBatchId)): # adjust with batch you want to process
       fileName = os.path.splitext(rgb_files[batchId-1])[0]
       matlab_script_with_vars = matlab_script % (output_dir + '/' + fileName + '.mat', images_dir + '/' + rgb_files[batchId-1], hha_dir + '/' + hha_files[batchId-1])
       
       worker_script = "worker" + str(x+1);
-      if (x == (workers-1) or (batchId == cnt)): # Wait at last worker of current or total batch
+      if (x == (workers-1) or (batchId == cnt) or specificWorker): # Wait at last worker of current or total batch
         spawn_command = launch_save_frame_batch_wait % (worker_script)
       else:
         spawn_command = launch_save_frame_batch % (worker_script)
